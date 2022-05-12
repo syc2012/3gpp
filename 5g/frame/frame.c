@@ -55,14 +55,14 @@ int main(int argc, char *argv[])
 
             if (0 == symbol)
             {
-                printf("%4d ", slot);
+                printf("%4d ", (slot % (0x1 << u)));
             }
             else
             {
                 printf("     ");
             }
 
-            printf("%6d\n", ((slot * 14) + symbol));
+            printf("%6d (%d)\n", symbol, ((slot * 14) + symbol));
         }
     }
     printf("\n");
