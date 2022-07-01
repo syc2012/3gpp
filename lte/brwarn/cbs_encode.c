@@ -285,7 +285,7 @@ static uint16 _encode16bitUcs2(
 
 #if 0
 uint8   _codingScheme = 0xF4;
-uint8   _pWarnString[] = "Alifecom warning test string. Alifecom warning test string. Alifecom warning test string. Alifecom warning test string. Alifecom warning test string. Alifecom warning test string. Alifecom warning test string. Alifecom warning test string. Alifecom warning test string. Alifecom warning test stringX";
+uint8   _pWarnString[] = "This the warning test string. This the warning test string. This the warning test string. This the warning test string. This the warning test string. This the warning test string. This the warning test string. This the warning test string. This the warning test string. This the warning test stringX";
 uint16  _warnStringLen = sizeof( _pWarnString );
 #endif
 #if 0
