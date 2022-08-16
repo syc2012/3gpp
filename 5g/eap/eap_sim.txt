@@ -1,0 +1,28 @@
+
+1) Authentication success
+   <- EAP-Request/Identity
+   -> EAP-Response/Identity
+   <- EAP-Request/SIM/Start
+       + AT_VERSION_LIST
+   -> EAP-Response/SIM/Start
+       + AT_NONCE_MT
+       + AT_SELECTED_VERSION
+
+      [Authenticator]
+       MK = SHA1(Identity || n*Kc || NONCE_MT || Version List || Selected Version)
+       K_aut = PRF( MK )
+       AT_RAND = n*RAND
+       AT_MAC = HMAC-SHA1-128((EAP packet || NONCE_MT), K_aut)
+
+   <- EAP-Request/SIM/Challenge
+       + AT_RAND
+       + AT_MAC
+
+      [Peer]
+       SRES, Kc = A3A8(RAND, Ki)
+       AT_MAC = HMAC-SHA1-128((EAP packet || n*SRES), K_aut)
+
+   -> EAP-Response/SIM/Challenge
+       + AT_MAC
+   <- EAP-Success
+

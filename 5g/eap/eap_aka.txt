@@ -1,0 +1,80 @@
+
+1) Authentication success
+   <- EAP-Request/Identity
+   -> EAP-Response/Identity
+
+      [Authenticator]
+       MK = SHA1(Identity || IK || CK)
+       K_encr, K_aut, MSK, EMSK = PRF( MK )
+       AT_MAC = HMAC-SHA1-128(K_aut, EAP-Request/AKA-Challenge)
+
+   <- EAP-Request/AKA-Challenge
+       + AT_RAND
+       + AT_AUTN
+       + AT_MAC
+
+      [Peer]
+       RES, CK, IK, AK = f2345(K, RAND)
+       AT_RES = RES
+       AT_MAC = HMAC-SHA1-128(K_aut, EAP-Response/AKA-Challenge)
+
+   -> EAP-Response/AKA-Challenge
+       + AT_RES
+       + AT_MAC
+   <- EAP-Success
+
+2) RES incorrect
+   <- EAP-Request/Identity
+   -> EAP-Response/Identity
+   <- EAP-Request/AKA-Challenge
+       + AT_RAND
+       + AT_AUTN
+       + AT_MAC
+   -> EAP-Response/AKA-Challenge
+       + AT_RES
+       + AT_MAC
+   <- EAP-Request/AKA-Notification
+       + AT_NOTIFICATION
+   -> EAP-Response/AKA-Notification
+       + AT_NOTIFICATION
+   <- EAP-Failure
+
+3) AUTN incorrect
+   <- EAP-Request/Identity
+   -> EAP-Response/Identity
+   <- EAP-Request/AKA-Challenge
+       + AT_RAND
+       + AT_AUTN
+       + AT_MAC
+   -> EAP-Response/AKA-Authentication-Reject
+   <- EAP-Failure
+
+4) AUTN sequence un-sync.
+   <- EAP-Request/Identity
+   -> EAP-Response/Identity
+   <- EAP-Request/AKA-Challenge
+       + AT_RAND
+       + AT_AUTN
+       + AT_MAC
+   -> EAP-Response/AKA-Synchronization-Failure
+       + AT_AUTS
+   <- EAP-Request/AKA-Challenge
+       + AT_RAND
+       + AT_AUTN
+       + AT_MAC
+   -> EAP-Response/AKA-Challenge
+       + AT_RES
+       + AT_MAC
+   <- EAP-Success
+
+5) EAP packet error
+   <- EAP-Request/Identity
+   -> EAP-Response/Identity
+   <- EAP-Request/AKA-Challenge
+       + AT_RAND
+       + AT_AUTN
+       + AT_MAC
+   -> EAP-Response/AKA-Client-Error
+       + AT_CLIENT_ERROR_CODE
+   <- EAP-Failure
+
